@@ -1,16 +1,16 @@
 <template>
   <q-layout view="hHh lpR fFf">
 
-    <q-header elevated class="bg-primary text-white" height-hint="98">
+    <q-header elevated class=" text-dark" height-hint="98" style="background: linear-gradient(145deg,#DCE35B 15%,#45B649 75%)">
       <q-toolbar>
         <q-btn dense flat round icon="menu" @click="left = !left" />
-
         <q-toolbar-title>
-          <q-avatar>
-            <img src="https://cdn.quasar.dev/logo/svg/quasar-logo.svg">
+          <q-avatar square>
+            <img src="../assets/sc.png">
           </q-avatar>
-          Title
         </q-toolbar-title>
+        <q-space ></q-space>
+        <span class="text-h5">YSEC</span>
       </q-toolbar>
 
 <!--      <q-tabs align="left">-->
@@ -29,15 +29,8 @@
       <router-view />
     </q-page-container>
 
-    <q-footer elevated class="bg-grey-8 text-white">
-      <q-toolbar>
-        <q-toolbar-title>
-          <q-avatar>
-            <img src="https://cdn.quasar.dev/logo/svg/quasar-logo.svg">
-          </q-avatar>
-          Title
-        </q-toolbar-title>
-      </q-toolbar>
+    <q-footer class="bg-grey-6 text-white" style="height:30px;">
+         <div class="q-pa-sm text-center ">CONSSC @ {{new Date().getFullYear()}}</div>
     </q-footer>
 
   </q-layout>
@@ -54,6 +47,9 @@ export default {
     return {
       left: false
     }
+  },
+  mounted () {
+    console.log('before')
   }
 }
 </script>

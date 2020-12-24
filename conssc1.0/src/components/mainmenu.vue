@@ -1,7 +1,22 @@
 <template>
-  <div class="q-pa-none" style="max-width: 350px">
-    <q-list   class="rounded-borders" active-class="bg-teal-1 text-grey-8">
-      <q-item clickable v-ripple>
+  <div class="q-pa-none" style="max-width: 300px">
+    <q-card class="bg-grey-3" square>
+      <q-card-section>
+        <div class="text-h5">刘玲玲</div>
+        <div class="text-subtitle2 text-right">运营部</div>
+        <div class="text-subtitle2 text-right">运营经理</div>
+      </q-card-section>
+      <q-separator />
+      <q-card-actions align="around">
+        <q-btn flat label="待我审批">
+          <q-badge color="red" align="middle" class="q-ml-sm">
+          22
+        </q-badge></q-btn>
+        <q-btn flat>个人信息</q-btn>
+      </q-card-actions>
+    </q-card>
+    <q-list   class="rounded-borders"  :default-active="'/Operation'" >
+      <q-item clickable v-ripple to="/Operation" active-class="bg-lime-3 text-dark" >
         <q-item-section avatar>
           <q-icon name="fas fa-clipboard" ></q-icon>
         </q-item-section>
@@ -16,7 +31,7 @@
         default-opened
         header-class="text-h6"
       >
-        <q-item clickable dense to="/operation"  >
+        <q-item clickable dense to="/PersonalInfo" active-class="bg-lime-3 text-dark">
           <q-item-section avatar>
             <q-icon></q-icon>
           </q-item-section>
@@ -24,7 +39,7 @@
             个人信息
           </q-card-section>
         </q-item>
-        <q-item clickable dense to="/operation"  >
+        <q-item clickable dense to="/UserList"  active-class="bg-lime-3 text-dark">
           <q-item-section avatar>
             <q-icon></q-icon>
           </q-item-section>
@@ -32,7 +47,8 @@
             员工列表
           </q-card-section>
         </q-item>
-        <q-item clickable dense to="/operation"  >
+
+        <q-item clickable dense  to="/HrTest" active-class="bg-lime-3 text-dark" >
           <q-item-section avatar>
             <q-icon></q-icon>
           </q-item-section>
@@ -48,7 +64,7 @@
         default-opened
         header-class="text-h6"
       >
-        <q-item clickable dense to="/operation"  >
+        <q-item clickable dense  to="/ProjectBoard" active-class="bg-lime-3 text-dark"  >
           <q-item-section avatar>
             <q-icon></q-icon>
           </q-item-section>
@@ -56,7 +72,7 @@
             项目看板
           </q-card-section>
         </q-item>
-        <q-item clickable dense to="/operation"  >
+        <q-item clickable dense to="/ProjectAnalysis" active-class="bg-lime-3 text-dark"  >
           <q-item-section avatar>
             <q-icon></q-icon>
           </q-item-section>
@@ -72,7 +88,7 @@
         default-opened
         header-class="text-h6"
       >
-        <q-item clickable dense to="/operation"  >
+        <q-item clickable dense to="/FinCash" active-class="bg-lime-3 text-dark"  >
           <q-item-section avatar>
             <q-icon></q-icon>
           </q-item-section>
@@ -80,7 +96,7 @@
             资金流转
           </q-card-section>
         </q-item>
-        <q-item clickable dense to="/operation"  >
+        <q-item clickable dense to="/FinAnalysis" active-class="bg-lime-3 text-dark"  >
           <q-item-section avatar>
             <q-icon></q-icon>
           </q-item-section>
@@ -96,7 +112,7 @@
         default-opened
         header-class="text-h6"
       >
-        <q-item clickable dense to="/operation"  >
+        <q-item clickable dense to="/ProductHouseware" active-class="bg-lime-3 text-dark"  >
           <q-item-section avatar>
             <q-icon></q-icon>
           </q-item-section>
@@ -104,7 +120,7 @@
             产品仓库
           </q-card-section>
         </q-item>
-        <q-item clickable dense to="/operation"  >
+        <q-item clickable dense to="/AdminHouseware" active-class="bg-lime-3 text-dark"  >
           <q-item-section avatar>
             <q-icon></q-icon>
           </q-item-section>
@@ -122,12 +138,10 @@ export default {
   name: 'mainmenu',
   data () {
     return {
-      active: true
     }
   }
 }
 </script>
 
 <style scoped>
-
 </style>
