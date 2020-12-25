@@ -9,6 +9,7 @@ import ProjectBoard from 'pages/ProjectBoard'
 import ProjectAnalysis from 'pages/ProjectAnalysis'
 import UserList from 'pages/UserList'
 import MainLayout from 'layouts/MainLayout'
+import OrgChart from 'pages/OrgChart'
 
 const routes = [
   {
@@ -19,6 +20,10 @@ const routes = [
       {
         path: '/Operation',
         component: Operation
+      },
+      {
+        path: '/OrgChart',
+        component: OrgChart
       },
       {
         path: '/AdminHouseware',

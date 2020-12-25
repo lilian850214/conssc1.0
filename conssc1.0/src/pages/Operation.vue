@@ -1,37 +1,51 @@
 <template>
-    <div>
-      <q-btn label="userlist" push @click="myclick"></q-btn>
-      这是user list结果==》{{res2}}
-     这是结果==》 {{res}}
-    </div>
+  <div class="q-pa-lg">
+op
+  </div>
 </template>
 
 <script>
+// import { getAge } from '../util/CustomCal'
 export default {
   name: 'Operation',
+  components: { },
   data () {
     return {
-      res: '',
-      res2: '发送了'
+      res: ''
+      // columns: [
+      //   {
+      //     name: 'realname',
+      //     label: '姓名',
+      //     field: 'realname'
+      //   },
+      //   {
+      //     name: 'userId',
+      //     label: '用户id',
+      //     field: 'userId'
+      //   },
+      //   {
+      //     name: 'birthday',
+      //     label: '出生日期',
+      //     field: 'birthday',
+      //     format: val => getAge(val)
+      //   }
+      // ]
     }
   },
   mounted () {
     // const data = { name: 'sadmin', pwd: '111111' }
-    this.$axios.post('http://localhost:8888/login', { name: 'sadmin', pwd: '111111' }).then((response) => {
+    this.$axios.post('http://localhost:8888/login', {
+      name: 'sadmin',
+      pwd: '111111'
+    }).then((response) => {
       this.res = response.data
     }
     )
   },
   methods: {
-    myclick: function () {
-      this.$axios.post('http://localhost:8888/user-detail').then((response) => {
-        this.res2 = response
-      }
-      )
-    }
   }
 }
 </script>
 
-<style scoped>
+<style lang="sass">
 </style>

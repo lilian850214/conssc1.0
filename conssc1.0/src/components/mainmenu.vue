@@ -17,11 +17,19 @@
     </q-card>
     <q-list   class="rounded-borders"  :default-active="'/Operation'" >
       <q-item clickable v-ripple to="/Operation" active-class="bg-lime-3 text-dark" >
+      <q-item-section avatar>
+        <q-icon name="fas fa-clipboard" ></q-icon>
+      </q-item-section>
+      <q-item-section class="text-h6 q-pl-none">
+        运营看板
+      </q-item-section>
+    </q-item>
+      <q-item clickable v-ripple to="/OrgChart" active-class="bg-lime-3 text-dark" >
         <q-item-section avatar>
           <q-icon name="fas fa-clipboard" ></q-icon>
         </q-item-section>
         <q-item-section class="text-h6 q-pl-none">
-          运营看板
+          组织架构
         </q-item-section>
       </q-item>
       <q-expansion-item
