@@ -1,6 +1,5 @@
 <template>
     <div>
-      org
       <org-tree></org-tree>
     </div>
 </template>
@@ -9,7 +8,11 @@
 import OrgTree from '../components/OrgTree'
 export default {
   name: 'OrgChart',
-  components: { OrgTree }
+  components: { OrgTree },
+  data () {
+    return {
+    }
+  }
 }
 </script>
 

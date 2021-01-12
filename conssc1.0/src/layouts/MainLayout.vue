@@ -8,6 +8,7 @@
           <q-avatar square>
             <img src="../assets/sc.png">
           </q-avatar>
+          <q-btn push @click="login">登录</q-btn>
         </q-toolbar-title>
         <q-space ></q-space>
         <span class="text-h5">YSEC</span>
@@ -20,9 +21,11 @@
 <!--      </q-tabs>-->
     </q-header>
 
-    <q-drawer show-if-above v-model="left" side="left" bordered>
+    <q-drawer show-if-above v-model="left" side="left">
+      <q-scroll-area class="fit">
       <!-- drawer content -->
       <mainmenu></mainmenu>
+      </q-scroll-area>
     </q-drawer>
 
     <q-page-container>
@@ -49,7 +52,50 @@ export default {
     }
   },
   mounted () {
-    console.log('before')
+  },
+  methods: {
+    login: function () {
+      this.$axios.post('http://localhost:8888/login', {
+        name: 'sadmin',
+        pwd: '111111'
+      }).then((response) => {
+        this.res = response.data
+      }
+      )
+    }
   }
 }
 </script>
+<style lang="sass">
+  .my-sticky-column-table
+    /* specifying max-width so the example can
+      highlight the sticky column on any browser window */
+    /*max-width: 1000px*/
+    font-size: 20px!important
+    border-bottom: rgba(0, 0, 0, 0.12) solid 1px
+
+    thead tr:first-child th:first-child
+      /* bg color is important for th; just specify one */
+      background-color: #ffffff
+
+    td:first-child
+      background-color: #f5f5f5
+      font-size: 18px
+      font-weight: bolder
+
+    th:first-child,
+    td:first-child
+      position: sticky
+      left: 0
+      z-index: 1
+    td:first-child
+      border-left: rgba(0, 0, 0, 0.12) solid 1px
+    td:last-child
+      border-right: rgba(0, 0, 0, 0.12) solid 1px
+
+    tr:hover
+      background-color: #f5f5f5
+
+    td
+      font-size: 16px
+</style>

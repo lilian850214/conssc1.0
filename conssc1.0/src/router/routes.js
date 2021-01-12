@@ -10,6 +10,8 @@ import ProjectAnalysis from 'pages/ProjectAnalysis'
 import UserList from 'pages/UserList'
 import MainLayout from 'layouts/MainLayout'
 import OrgChart from 'pages/OrgChart'
+import ModuleEdit from 'pages/ModuleEdit'
+import Patent from 'pages/Patent'
 
 const routes = [
   {
@@ -59,6 +61,14 @@ const routes = [
       {
         path: '/PersonalInfo',
         component: PersonalInfo
+      },
+      {
+        path: '/InnerAdmin',
+        component: ModuleEdit
+      },
+      {
+        path: '/Patent',
+        component: Patent
       }
     ]
   },

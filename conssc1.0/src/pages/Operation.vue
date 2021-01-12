@@ -1,6 +1,5 @@
 <template>
   <div class="q-pa-lg">
-op
   </div>
 </template>
 
@@ -41,8 +40,6 @@ export default {
       this.res = response.data
     }
     )
-  },
-  methods: {
   }
 }
 </script>

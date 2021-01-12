@@ -15,8 +15,8 @@
         <q-btn flat>个人信息</q-btn>
       </q-card-actions>
     </q-card>
-    <q-list   class="rounded-borders"  :default-active="'/Operation'" >
-      <q-item clickable v-ripple to="/Operation" active-class="bg-lime-3 text-dark" >
+    <q-list   class="rounded-borders menu-list q-pt-lg"  :default-active="'/Operation'"  dense>
+      <q-item clickable v-ripple to="/Operation" active-class="bg-lime-2 text-dark" >
       <q-item-section avatar>
         <q-icon name="fas fa-clipboard" ></q-icon>
       </q-item-section>
@@ -24,12 +24,12 @@
         运营看板
       </q-item-section>
     </q-item>
-      <q-item clickable v-ripple to="/OrgChart" active-class="bg-lime-3 text-dark" >
+      <q-item clickable v-ripple to="/OrgChart" active-class="bg-lime-2 text-dark" >
         <q-item-section avatar>
-          <q-icon name="fas fa-clipboard" ></q-icon>
+          <q-icon name="fas fa-sitemap" ></q-icon>
         </q-item-section>
         <q-item-section class="text-h6 q-pl-none">
-          组织架构
+          组织 AND 权限
         </q-item-section>
       </q-item>
       <q-expansion-item
@@ -39,7 +39,7 @@
         default-opened
         header-class="text-h6"
       >
-        <q-item clickable dense to="/PersonalInfo" active-class="bg-lime-3 text-dark">
+        <q-item clickable dense to="/PersonalInfo" active-class="bg-lime-2 text-dark">
           <q-item-section avatar>
             <q-icon></q-icon>
           </q-item-section>
@@ -47,7 +47,7 @@
             个人信息
           </q-card-section>
         </q-item>
-        <q-item clickable dense to="/UserList"  active-class="bg-lime-3 text-dark">
+        <q-item clickable dense to="/UserList"  active-class="bg-lime-2 text-dark">
           <q-item-section avatar>
             <q-icon></q-icon>
           </q-item-section>
@@ -56,7 +56,7 @@
           </q-card-section>
         </q-item>
 
-        <q-item clickable dense  to="/HrTest" active-class="bg-lime-3 text-dark" >
+        <q-item clickable dense  to="/HrTest" active-class="bg-lime-2 text-dark" >
           <q-item-section avatar>
             <q-icon></q-icon>
           </q-item-section>
@@ -72,7 +72,7 @@
         default-opened
         header-class="text-h6"
       >
-        <q-item clickable dense  to="/ProjectBoard" active-class="bg-lime-3 text-dark"  >
+        <q-item clickable dense  to="/ProjectBoard" active-class="bg-lime-2 text-dark"  >
           <q-item-section avatar>
             <q-icon></q-icon>
           </q-item-section>
@@ -80,7 +80,7 @@
             项目看板
           </q-card-section>
         </q-item>
-        <q-item clickable dense to="/ProjectAnalysis" active-class="bg-lime-3 text-dark"  >
+        <q-item clickable dense to="/ProjectAnalysis" active-class="bg-lime-2 text-dark"  >
           <q-item-section avatar>
             <q-icon></q-icon>
           </q-item-section>
@@ -96,7 +96,7 @@
         default-opened
         header-class="text-h6"
       >
-        <q-item clickable dense to="/FinCash" active-class="bg-lime-3 text-dark"  >
+        <q-item clickable dense to="/FinCash" active-class="bg-lime-2 text-dark"  >
           <q-item-section avatar>
             <q-icon></q-icon>
           </q-item-section>
@@ -104,7 +104,7 @@
             资金流转
           </q-card-section>
         </q-item>
-        <q-item clickable dense to="/FinAnalysis" active-class="bg-lime-3 text-dark"  >
+        <q-item clickable dense to="/FinAnalysis" active-class="bg-lime-2 text-dark"  >
           <q-item-section avatar>
             <q-icon></q-icon>
           </q-item-section>
@@ -114,13 +114,12 @@
         </q-item>
       </q-expansion-item>
       <q-expansion-item
-        expand-separator
         icon="fas fa-warehouse"
         label="仓库管理"
         default-opened
         header-class="text-h6"
       >
-        <q-item clickable dense to="/ProductHouseware" active-class="bg-lime-3 text-dark"  >
+        <q-item clickable dense to="/ProductHouseware" active-class="bg-lime-2 text-dark"  >
           <q-item-section avatar>
             <q-icon></q-icon>
           </q-item-section>
@@ -128,7 +127,7 @@
             产品仓库
           </q-card-section>
         </q-item>
-        <q-item clickable dense to="/AdminHouseware" active-class="bg-lime-3 text-dark"  >
+        <q-item clickable dense to="/AdminHouseware" active-class="bg-lime-2 text-dark"  >
           <q-item-section avatar>
             <q-icon></q-icon>
           </q-item-section>
@@ -137,6 +136,22 @@
           </q-card-section>
         </q-item>
       </q-expansion-item>
+      <q-item clickable v-ripple to="/InnerAdmin" active-class="bg-lime-2 text-dark" >
+        <q-item-section avatar>
+          <q-icon name="fas fa-key" ></q-icon>
+        </q-item-section>
+        <q-item-section class="text-h6 q-pl-none">
+          模块修改
+        </q-item-section>
+      </q-item>
+      <q-item clickable v-ripple to="/Patent" active-class="bg-lime-2 text-dark" >
+        <q-item-section avatar>
+          <q-icon name="fas fa-file-powerpoint" ></q-icon>
+        </q-item-section>
+        <q-item-section class="text-h6 q-pl-none">
+          专利信息
+        </q-item-section>
+      </q-item>
  </q-list>
   </div>
 </template>
@@ -151,5 +166,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="sass" scoped>
+  .menu-list .q-item
+    border-radius: 0 32px 32px 0
 </style>

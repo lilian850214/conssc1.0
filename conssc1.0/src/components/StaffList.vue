@@ -57,24 +57,4 @@ export default {
 </script>
 
 <style lang="sass">
-  .my-sticky-column-table
-    /* specifying max-width so the example can
-      highlight the sticky column on any browser window */
-    max-width: 1000px
-
-    thead tr:first-child th:first-child
-      /* bg color is important for th; just specify one */
-      background-color: #e6e6e6
-
-    td:first-child
-      background-color: #dcffcc
-
-    th:first-child,
-    td:first-child
-      position: sticky
-      left: 0
-      z-index: 1
-
-    tr:hover
-      background-color: #dcffcc
 </style>
