@@ -21,7 +21,7 @@
 <!--      </q-tabs>-->
     </q-header>
 
-    <q-drawer show-if-above v-model="left" side="left">
+    <q-drawer show-if-above v-model="left" side="left" bordered>
       <q-scroll-area class="fit">
       <!-- drawer content -->
       <mainmenu></mainmenu>

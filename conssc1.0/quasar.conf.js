@@ -21,7 +21,9 @@ module.exports = function (/* ctx */) {
     boot: [
 
       'i18n',
-      'axios'
+      'axios',
+      'vuelidate',
+      'echart'
     ],
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
@@ -47,12 +49,15 @@ module.exports = function (/* ctx */) {
     build: {
       vueRouterMode: 'hash', // available values: 'hash', 'history'
 
-      // transpile: false,
+      transpile: true,
 
       // Add dependencies for transpiling with Babel (Array of string/regex)
       // (from node_modules, which are by default not transpiled).
       // Applies only if "transpile" is set to true.
-      // transpileDependencies: [],
+      transpileDependencies: [
+        'vue-echarts',
+        'resize-detector'
+      ],
 
       // rtl: false, // https://quasar.dev/options/rtl-support
       // preloadChunks: true,

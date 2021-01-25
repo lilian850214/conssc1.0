@@ -72,6 +72,14 @@
         default-opened
         header-class="text-h6"
       >
+        <q-item clickable dense  to="/ProjectList" active-class="bg-lime-2 text-dark"  >
+          <q-item-section avatar>
+            <q-icon></q-icon>
+          </q-item-section>
+          <q-card-section class="text-subtitle1 q-pa-xs q-pl-lg">
+            项目列表
+          </q-card-section>
+        </q-item>
         <q-item clickable dense  to="/ProjectBoard" active-class="bg-lime-2 text-dark"  >
           <q-item-section avatar>
             <q-icon></q-icon>

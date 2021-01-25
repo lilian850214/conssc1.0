@@ -5,13 +5,14 @@ import FinCash from 'pages/FinCash'
 import HrTest from 'pages/HrTest'
 import PersonalInfo from 'pages/PersonalInfo'
 import ProductHouseware from 'pages/ProductHouseware'
-import ProjectBoard from 'pages/ProjectBoard'
+import ProjectBoard from 'pages/ProjectPlan'
 import ProjectAnalysis from 'pages/ProjectAnalysis'
 import UserList from 'pages/UserList'
 import MainLayout from 'layouts/MainLayout'
 import OrgChart from 'pages/OrgChart'
 import ModuleEdit from 'pages/ModuleEdit'
 import Patent from 'pages/Patent'
+import ProjectList from 'pages/ProjectList'
 
 const routes = [
   {
@@ -47,7 +48,11 @@ const routes = [
         component: ProductHouseware
       },
       {
-        path: '/ProjectBoard',
+        path: '/ProjectList',
+        component: ProjectList
+      },
+      {
+        path: '/ProjectBoard/:autoId/:projectName',
         component: ProjectBoard
       },
       {

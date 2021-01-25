@@ -4,7 +4,8 @@ import createPersistedState from 'vuex-persistedstate'
 import OrgChart from './orgChart'
 import InnerAdminEdit from './innerAdminEdit'
 import Patent from './patent'
-
+import Project from './project'
+import ProjectPlan from './projectPlan'
 Vue.use(Vuex)
 /*
  * If not building with SSR mode, you can
@@ -20,7 +21,9 @@ export default function (/* { ssrContext } */) {
     modules: {
       OrgChart,
       InnerAdminEdit,
-      Patent
+      Patent,
+      Project,
+      ProjectPlan
     },
 
     // enable strict mode (adds overhead!)

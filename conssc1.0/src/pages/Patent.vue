@@ -1,116 +1,122 @@
 <template>
   <div class="q-pa-md">
-    <!-- 新增专利-->
-    <q-list>
-      <q-expansion-item
-        icon="fas fa-plus"
-        label="新增专利"
-        header-class="text-purple text-h6"
-      >
-        <q-card>
-          <q-card-section class="q-pt-none">
-            <div class="row">
-              <div class="col-xs-12 col-lg-3 col-md-6">
-                <q-input v-model="newData.patentId" prefix="申请号" color="green-5" class="q-pa-sm text-subtitle1"
-                         clearable dense/>
-                <q-input v-model="newData.patentName" prefix="专利名称" color="green-5" class="q-pa-sm text-subtitle1"
-                         clearable dense/>
-              </div>
-              <div class="col-xs-12 col-lg-3 col-md-6">
-                <q-input v-model="newData.patentType" prefix="专利类型" color="green-5" class="q-pa-sm text-subtitle1"
-                         clearable dense/>
-                <q-input v-model="newData.patentState" prefix="专利状态" color="green-5" class="q-pa-sm text-subtitle1"
-                         clearable dense/>
-              </div>
-              <div class="col-xs-12 col-lg-3 col-md-6">
-                <q-input v-model="newData.patentApplyDate"  prefix="申请日期" color="green-5" class="q-pa-sm text-subtitle1" dense>
-                  <template v-slot:append>
-                    <q-icon name="event" class="cursor-pointer">
-                      <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-                        <q-date v-model="newData.patentApplyDate" mask="YYYY-MM-DD" color="green-5" minimal>
-                          <div class="row items-center justify-end">
-                            <q-btn v-close-popup label="退出" color="green-5" flat />
-                          </div>
-                        </q-date>
-                      </q-popup-proxy>
-                    </q-icon>
-                  </template>
-                </q-input>
-                <q-input v-model="newData.patentPassDate"  prefix="授权日期" color="green-5" class="q-pa-sm text-subtitle1" dense>
-                  <template v-slot:append>
-                    <q-icon name="event" class="cursor-pointer">
-                      <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-                        <q-date v-model="newData.patentPassDate" mask="YYYY-MM-DD" color="green-5" minimal>
-                        </q-date>
-                      </q-popup-proxy>
-                    </q-icon>
-                  </template>
-                </q-input>
-              </div>
-              <div class="col-xs-12 col-lg-3 col-md-6">
-                <q-input v-model="newData.patentFeeMetion"  prefix="缴费提醒" color="green-5" class="q-pa-sm text-subtitle1" dense>
-                  <template v-slot:append>
-                    <q-icon name="event" class="cursor-pointer">
-                      <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-                        <q-date v-model="newData.patentFeeMetion" mask="YYYY-MM-DD" color="green-5" minimal>
-                        </q-date>
-                      </q-popup-proxy>
-                    </q-icon>
-                  </template>
-                </q-input>
-                <q-input v-model="newData.patentAgency" prefix="代理机构" color="green-5"
-                         class="q-pa-sm text-subtitle1" type="text" clearable dense/>
-              </div>
-            </div>
-            <div class="col-12">
-              <q-input v-model="newData.patentRemark" prefix="专利备注" color="green-5"
-                       class="q-pa-sm text-subtitle1" type="textarea" autogrow dense/>
-            </div>
-          </q-card-section>
-
-          <q-card-actions align="left" class="bg-white text-green-5">
-            <q-btn flat label="保 存" size="18px"  @click="addNewData"/>
-            <q-btn flat label="清 空" size="18px"  style="color: #FF0080" @click="addNextNewData"/>
-            <span class="q-pl-lg text-green-5 text-weight-bolder text-subtitle1" v-if="tTip">修改成功</span>
-            <span class="q-pl-lg text-red-5 text-weight-bolder" v-if="fTip">修改失败</span>
-            <q-spinner
-            color="lime-5"
-            size="2em"
-            :thickness="10"
-            v-if="addloading"
-            class="q-ml-lg"
-            />
-          </q-card-actions>
-        </q-card>
-      </q-expansion-item>
-    </q-list>
+    <!--专利图表-->
+    <div class="row q-mt-lg">
+      <div class="col-md-6 col-sm-12">
+        <v-chart :options="pieChart" theme="yellow-green" auto-resize/>
+      </div>
+      <div class="col-md-6 col-sm-12">
+        <v-chart :options="pieAuthChart" theme="yellow-green" auto-resize/>
+      </div>
+    </div>
+    <!--专利查询-->
+    <q-card class="q-pt-lg" flat>
+      <q-card-section>
+          <p class="text-h6 q-pl-lg q-pa-sm half-round bg-lime-4 fixed-width">搜索条件</p>
+      <div class="row">
+        <div class="col-xs-12 col-lg-3 col-md-6">
+          <q-input v-model="queryData.patentId"
+                   clearable dense
+                   prefix="申请号"
+                   color="green-5"
+                   class="q-pa-sm text-subtitle1"
+          />
+          <q-input v-model="queryData.patentName"
+                   clearable dense
+                   prefix="专利名称"
+                   color="green-5"
+                   class="q-pa-sm text-subtitle1"
+          />
+        </div>
+        <div class="col-xs-12 col-lg-3 col-md-6">
+          <q-input v-model="queryData.patentType" prefix="专利类型" color="green-5" class="q-pa-sm text-subtitle1"
+                   clearable dense/>
+          <q-select v-model="queryData.patentState" prefix="专利状态" :options="patentStateOptions" color="green-5"
+                    class="q-pa-sm text-subtitle1" dense/>
+        </div>
+        <div class="col-xs-12 col-lg-3 col-md-6">
+          <q-input v-model="queryData.patentApplyDate"
+                   type="date"
+                   prefix="申请日启"
+                   hint="包含该日期"
+                   color="green-5"
+                   class="q-pa-sm text-subtitle1"
+                   dense
+                   error-message="日期格式错误"
+                   :error="!this.$v.queryData.patentApplyDate.maxLength"/>
+          <q-input v-model="queryData.patentApplyDateEnd"
+                   type="date"
+                   prefix="申请日止"
+                   color="green-5" class="q-pa-sm text-subtitle1"
+                   dense
+                   error-message="日期格式错误"
+                   :error="!this.$v.queryData.patentApplyDateEnd.maxLength"/>
+        </div>
+        <div class="col-xs-12 col-lg-3 col-md-6">
+          <q-input v-model="queryData.patentPassDate"
+                   type="date"
+                   prefix="授权日启"
+                   hint="包含该日期"
+                   color="green-5"
+                   class="q-pa-sm text-subtitle1"
+                   dense
+                   error-message="日期格式错误"
+                   :error="!this.$v.queryData.patentPassDate.maxLength"
+          />
+          <q-input v-model="queryData.patentPassDateEnd"
+                   type="date"
+                   prefix="授权日止"
+                   color="green-5" class="q-pa-sm text-subtitle1"
+                   dense
+                   error-message="日期格式错误"
+                   :error="!this.$v.queryData.patentPassDateEnd.maxLength"/>
+        </div>
+      </div>
+      <div class="col-12">
+        <q-input v-model="queryData.patentAgency" prefix="代理机构" color="green-5"
+                 class="q-pa-sm text-subtitle1" type="text" clearable dense/>
+        <q-input v-model="queryData.patentRemark" prefix="专利备注" color="green-5"
+                 class="q-pa-sm text-subtitle1" type="textarea" autogrow dense name="patentRemark"/>
+      </div>
+      </q-card-section>
+        <q-card-section>
+        <div class="row float-right">
+          <q-btn class="q-ma-sm" color="white" text-color="black" label="重 置" size="md" @click="resetData"
+          />
+          <q-btn class="q-ma-sm text-black" color="lime-4" label="查 询" size="md" @click="selectData"
+          />
+        </div>
+      </q-card-section>
+    </q-card>
     <!--专利表格-->
-    <div class="q-pa-md">
+    <div class="q-pa-md q-pt-lg">
       <div class=" q-pa-none">
-        <h4 class="q-mb-sm text-center">专利清单</h4>
-        <q-separator color="green-5" size="2px"/>
-        <div class="q-mt-lg">
-          <span class="q-pa-sm" style="line-height:1.5">每页显示</span>
-          <q-radio v-model="rowsPerPage" val=10 label="10" color="green-5" size="xs"/>
-          <q-radio v-model="rowsPerPage" val=20 label="20" color="green-5" size="xs"/>
-          <q-radio v-model="rowsPerPage" val=30 label="30" color="green-5" size="xs"/>
-          <q-radio v-model="rowsPerPage" val=50 label="50" color="green-5" size="xs"/>
-          <q-radio v-model="rowsPerPage" val=0 label="所有" color="green-5" size="xs"/>
+        <p class="text-h6 q-pl-lg q-pa-sm half-round bg-lime-4 fixed-width q-mb-none">专利列表</p>
+        <div>
+          <span class="q-pa-lg text-subtitle2">每页显示</span>
+          <q-radio v-model="rowsPerPage" val=10 label="10" color="lime-7" size="md"/>
+          <q-radio v-model="rowsPerPage" val=20 label="20" color="lime-7" size="md"/>
+          <q-radio v-model="rowsPerPage" val=30 label="30" color="lime-7" size="md"/>
+          <q-radio v-model="rowsPerPage" val=0 label="所有" color="lime-7" size="md"/>
         </div>
       </div>
       <q-table
         flat
         square
+        dense
         :separator="'horizontal'"
         :data="patentList"
         :columns="columns"
         row-key="index"
         :loading="tbLoading"
-        class="my-sticky-column-table q-pt-lg"
+        class="my-sticky-column-table q-pt-none"
         :pagination.sync="pagination"
         @row-dblclick="edit"
         hide-pagination
       >
+        <template v-slot:top-right>
+        <q-btn color="lime-4" class="text-black" style="margin-right:-15px" label="新增专利" @click="addDialog=true" />
+      </template>
         <template v-slot:header="props">
           <q-tr :props="props">
             <q-th></q-th>
@@ -125,9 +131,9 @@
         </template>
         <template v-slot:body="props">
           <q-tr :props="props">
-            <q-td>
-              <q-btn size="sm" flat icon="fas fa-edit" @click="edit(props)"></q-btn>
-              <q-btn size="sm" flat icon="fas fa-trash-alt" @click="trash(props)"></q-btn>
+            <q-td class="q-ma-xs" >
+              <q-icon class="q-pa-sm" size="sm" flat name="fas fa-edit" @click="edit(props)"></q-icon>
+              <q-icon size="sm" flat name="fas fa-trash-alt" @click="trash(props)"></q-icon>
             </q-td>
             <q-td>{{ props.rowIndex+1 }}</q-td>
             <q-td>{{ props.row.patentId }}</q-td>
@@ -135,14 +141,15 @@
               {{ props.row.patentName }}
             </q-td>
             <q-td>{{ props.row.patentType }}</q-td>
-            <q-td>{{ props.row.patentState }}</q-td>
+            <q-td :class="props.row.patentState==='授权'?'bg-grey-3':''">{{ props.row.patentState }}</q-td>
             <q-td>{{ props.row.patentApplyDate }}</q-td>
             <q-td>{{ props.row.patentPassDate }}</q-td>
             <q-td>{{ props.row.patentFee }}</q-td>
             <q-td>{{ props.row.patentFeeMetion }}
               <q-badge floating color="red" v-if="diffDate(props.row.patentFeeMetion)">
                 即将到期
-              </q-badge></q-td>
+              </q-badge>
+            </q-td>
             <q-td>{{ props.row.patentAgency }}</q-td>
             <q-td>{{ props.row.patentRemark }}</q-td>
           </q-tr>
@@ -151,14 +158,13 @@
       <div class="row justify-center q-mt-md">
         <q-pagination
           v-model="currentPage"
-          color="green"
+          color="black"
           :max="pageSize"
           :max-pages="6"
           :boundary-numbers="true"
-        >
-        </q-pagination>
+        />
       </div>
-      <!-- 修改内容对话框-->
+      <!-- 修改内容-->
       <q-dialog
         v-model="editDialog"
       >
@@ -168,109 +174,180 @@
           </q-card-section>
 
           <q-card-section class="q-pt-none">
-            <q-input standout v-model="rowData.patentName" prefix="专利名称" class="q-pt-lg text-subtitle1"
+            <q-input v-model="rowData.patentName" prefix="专利名称" class="q-pt-lg text-subtitle1"
+                     clearable dense
+                     error-message="必填"
+                     color="green-5"
+                     :error="!this.$v.rowData.patentName.required"/>
+            <q-input v-model="rowData.patentType" prefix="专利类型" color="green-5" class="q-pt-lg text-subtitle1"
                      clearable dense/>
-            <q-input standout v-model="rowData.patentType" prefix="专利类型" color="green-5" class="q-pt-lg text-subtitle1"
-                     clearable dense/>
-            <q-input standout v-model="rowData.patentState" prefix="专利状态" color="green-5" class="q-pt-lg text-subtitle1"
-                     clearable dense/>
-            <q-input standout v-model="rowData.patentApplyDate"  prefix="申请日期" class="q-pt-lg text-subtitle1" dense>
-              <template v-slot:append>
-                <q-icon name="event" class="cursor-pointer">
-                  <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-                    <q-date v-model="rowData.patentApplyDate" mask="YYYY-MM-DD" color="green-5" minimal>
-                    </q-date>
-                  </q-popup-proxy>
-                </q-icon>
-              </template>
-            </q-input>
-            <q-input standout v-model="rowData.patentPassDate"  prefix="授权日期" class="q-pt-lg text-subtitle1" dense>
-              <template v-slot:append>
-                <q-icon name="event" class="cursor-pointer">
-                  <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-                    <q-date v-model="rowData.patentPassDate" mask="YYYY-MM-DD" color="green-5" minimal>
-                    </q-date>
-                  </q-popup-proxy>
-                </q-icon>
-              </template>
-            </q-input>
-            <q-input standout v-model="rowData.patentFee" prefix="专利费用" color="green-5"
+            <q-select v-model="rowData.patentState" prefix="专利状态" :options="patentStateOptions" color="green-5"
+                      class="q-pt-lg text-subtitle1" dense/>
+            <q-input v-model="rowData.patentApplyDate"
+                     color="green-5"
+                     type="date"
+                     prefix="申请日期"
+                     class="q-pt-lg text-subtitle1"
+                     dense
+                     error-message="必填"
+                     :error="!this.$v.rowData.patentApplyDate.maxLength"/>
+            <q-input v-model="rowData.patentPassDate"
+                     type="date"
+                     prefix="授权日期"
+                     class="q-pt-lg text-subtitle1"
+                     dense
+                     color="green-5"
+                     error-message="日期格式错误"
+                     :error="!this.$v.rowData.patentPassDate.maxLength"
+            />
+
+            <q-input v-model="rowData.patentFee" prefix="专利费用" color="green-5"
                      class="q-pt-lg text-subtitle1" type="text" clearable dense/>
-            <q-input standout v-model="rowData.patentFeeMetion"  prefix="缴费提醒" class="q-pt-lg text-subtitle1" dense>
-              <template v-slot:append>
-                <q-icon name="event" class="cursor-pointer">
-                  <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-                    <q-date v-model="rowData.patentFeeMetion" mask="YYYY-MM-DD" color="green-5" minimal>
-                    </q-date>
-                  </q-popup-proxy>
-                </q-icon>
-              </template>
-            </q-input>
-            <q-input standout v-model="rowData.patentAgency" prefix="代理机构" color="green-5"
+            <q-input v-model="rowData.patentFeeMetion"
+                     color="green-5"
+                     type="date"
+                     prefix="缴费提醒"
+                     class="q-pt-lg text-subtitle1"
+                     dense
+                     error-message="日期格式错误"
+                     :error="!this.$v.rowData.patentFeeMetion.maxLength"
+            />
+            <q-input v-model="rowData.patentAgency" prefix="代理机构" color="green-5"
                      class="q-pt-lg text-subtitle1" type="text" clearable dense/>
-            <q-input standout v-model="rowData.patentRemark" prefix="专利备注" color="green-5"
+            <q-input v-model="rowData.patentRemark" prefix="专利备注" color="green-5"
                      class="q-pt-lg text-subtitle1" type="textarea" autogrow dense/>
           </q-card-section>
 
           <q-card-actions align="right" class="bg-white text-green-5">
             <span class="q-pr-lg text-green-5 text-weight-bolder" v-if="tTip">修改成功</span>
             <span class="q-pr-lg text-red-5 text-weight-bolder" v-if="fTip">修改失败</span>
-            <q-spinner
-              color="lime-5"
-              size="2em"
-              :thickness="10"
-              v-if="loading"
-              class="q-ml-lg"
-            />
-            <q-btn flat label="保 存" size="18px"  @click="sendEditedData" :disable="btnDisable"/>
+            <q-btn :loading="loading" flat label="保 存" class="bg-lime-4 text-black" @click="sendEditedData" :disable="btnDisable"/>
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
+      <!-- 新增专利-->
+      <q-dialog
+        v-model="addDialog"
+        full-width
+      >
+        <q-card class="bg-grey-2">
+          <q-card-section class="q-pt-none">
+            <div class="row">
+              <div class="col-xs-12 col-lg-3 col-md-6">
+                <q-input v-model="newData.patentId"
+                         clearable
+                         prefix="申请号"
+                         color="green-5"
+                         class="q-pa-sm text-subtitle1"
+                         error-message="申请号重复"
+                         :error="!this.$v.newData.patentId.isUnique"
+                         debounce="50000"></q-input>
+                <q-input v-model="newData.patentName"
+                         clearable
+                         prefix="专利名称"
+                         color="green-5"
+                         class="q-pa-sm text-subtitle1"
+                         hint=""
+                         error-message="必填"
+                         :error="!this.$v.newData.patentName.required"
+                />
+              </div>
+              <div class="col-xs-12 col-lg-3 col-md-6">
+                <q-input v-model="newData.patentType" prefix="专利类型"
+                         color="green-5"
+                         class="q-pa-sm text-subtitle1"
+                         clearable
+                         hint="请确保同一类型名称相同，否则图表将统计出错"
+                         error-message="必填"
+                         :error="!this.$v.newData.patentType.required"/>
+                <q-select v-model="newData.patentState" prefix="专利状态"
+                          :options="patentStateOptions"
+                          color="green-5"
+                          class="q-pa-sm text-subtitle1"
+                          error-message="必填"
+                          :error="!this.$v.newData.patentState.required"/>
+              </div>
+              <div class="col-xs-12 col-lg-3 col-md-6">
+                <q-input v-model="newData.patentApplyDate"
+                         type="date"
+                         prefix="申请日期"
+                         color="green-5"
+                         class="q-pa-sm text-subtitle1"
+                         clearable
+                         error-message="日期格式错误"
+                         :error="!this.$v.newData.patentApplyDate.maxLength"/>
+                <q-input v-model="newData.patentPassDate"
+                         type="date"
+                         prefix="授权日期"
+                         color="green-5"
+                         class="q-pa-sm text-subtitle1"
+                         clearable
+                         error-message="日期格式错误"
+                         :error="!this.$v.newData.patentPassDate.maxLength"
+                />
+              </div>
+              <div class="col-xs-12 col-lg-3 col-md-6">
+                <q-input v-model="newData.patentFeeMetion"
+                         type="date"
+                         prefix="缴费提醒"
+                         color="green-5" class="q-pa-sm text-subtitle1"
+                         clearable
+                         error-message="日期格式错误"
+                         :error="!this.$v.newData.patentFeeMetion.maxLength"/>
+                <q-input v-model="newData.patentAgency" prefix="代理机构" color="green-5"
+                         class="q-pa-sm text-subtitle1" type="text" clearable/>
+              </div>
+            </div>
+            <div class="col-12">
+              <q-input v-model="newData.patentRemark" prefix="专利备注" color="green-5"
+                       class="q-pa-sm text-subtitle1" type="textarea" autogrow/>
+            </div>
+          </q-card-section>
+
+          <q-card-actions align="left" class="bg-grey-2 text-green-5">
+            <q-btn :loading="addloading" class="q-ma-md text-black" color="lime-4" label="保 存" size="18px" @click="addNewData"
+                   :disabled="this.$v.newData.$invalid">
+            </q-btn>
+            <!--操作结果提示-->
+            <span class="q-pl-lg text-green-5 text-weight-bolder text-subtitle1" v-if="tTip">添加成功</span>
+            <span class="q-pl-lg text-red-5 text-weight-bolder" v-if="fTip">添加失败</span>
           </q-card-actions>
         </q-card>
       </q-dialog>
 
     </div>
-    <!--  修改数据-->
-    <q-dialog v-model="alert">
-      <q-card>
-        <q-card-section>
-          <div class="text-h6">提示</div>
-        </q-card-section>
-
-        <q-card-section class="q-pa-lg">
-          请先选择需要修改的内容。
-        </q-card-section>
-
-        <q-card-actions align="right">
-          <q-btn flat label="OK" color="primary" v-close-popup/>
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
   </div>
 </template>
 
 <script>
 
-import { mapState, mapMutations, mapActions } from 'vuex'
+import { mapActions, mapMutations, mapState } from 'vuex'
 import { difDate } from '../util/dataTimeHandler'
+import { helpers, maxLength, required } from 'vuelidate/lib/validators'
+import { isUnique } from '../util/myValidate'
+import ECharts from 'vue-echarts/components/ECharts'
 
 export default {
   name: 'Patent',
+  components: {
+    'v-chart': ECharts
+  },
   data () {
     return {
       /*
-              * currentPage，rowsPerPage表格分页初始化
-              * tbLoading 表格显示加载状态
-              * */
+                  * currentPage，rowsPerPage表格分页初始化
+                  * tbLoading 表格显示加载状态
+                  * */
       currentPage: 1,
       rowsPerPage: '10',
       tbLoading: false,
-      selected: [],
 
       /*
-              * alert 未点击表格而直接保存alert对话框
-              * loading 保存后返回的sendRes，显示成功或失败的提示
-              * tTip fTip 更新成功或失败的文本提示
-              * addloading 保存后返回的addRes，显示成功或失败的提示
-              * */
+                  * alert 未点击表格而直接保存alert对话框
+                  * loading 保存后返回的sendRes，显示成功或失败的提示
+                  * tTip fTip 更新成功或失败的文本提示
+                  * addloading 保存后返回的addRes，显示成功或失败的提示
+                  * */
       alert: false,
       addloading: false,
       loading: false,
@@ -279,32 +356,44 @@ export default {
       btnDisable: false,
 
       /*
-              * detail 要修改的内容
-              * sendCode 当前修改内容对应的权限代码
-              * modifiedIndex 当前修改内容对应的索引值，用于mutation中对应修改vuex的值
-              *
-              * */
+                  * detail 要修改的内容
+                  * sendCode 当前修改内容对应的权限代码
+                  *
+                  *
+                  * */
       detail: null,
-      modifiedIndex: null,
       editDialog: false,
+      addDialog: false,
       /*
-              * rowData 双击表格行后获得改行的数据
-              * newData 新增数据暂存，作为参数发送至后台
-              * */
-      rowData: [],
-      newData: [
-        {
-          patentId: null,
-          patentName: null,
-          patentType: null,
-          patentState: null,
-          patentPassDate: null,
-          patentFeeMetion: null,
-          patentAgency: null,
-          patentRemark: null
+                  * rowData 双击表格行后获得改行的数据
+                  * newData 新增数据暂存，作为参数发送至后台
+                  * */
+      patentStateOptions: ['审查中', '授权', '撤回', '失效'],
+      rowData: {},
+      newData:
+          {
+            patentId: null,
+            patentName: null,
+            patentType: null,
+            patentState: null,
+            patentPassDate: null,
+            patentFeeMetion: null,
+            patentAgency: null,
+            patentRemark: null
 
-        }
-      ],
+          },
+      queryData: {
+        patentId: null,
+        patentName: null,
+        patentType: null,
+        patentState: null,
+        patentApplyDate: null,
+        patentApplyDateEnd: null,
+        patentPassDate: null,
+        patentPassDateEnd: null,
+        patentAgency: null,
+        patentRemark: null
+      },
       columns: [
         {
           name: 'index',
@@ -403,8 +492,46 @@ export default {
       ]
     }
   },
+  mounted () {
+    if (this.patentList.length === 0) {
+      // todo 为空且返回为成功
+      this.tbLoading = true
+    }
+    /* 挂载后获取初始分页信息 */
+    this.onRequest({
+      pagination: this.pagination,
+      queryData: this.queryData
+    })
+    this.patentChartAction()
+  },
+  validations: {
+    newData: {
+      patentId: {
+        isUnique: (val) => !helpers.req(val) || isUnique(val).catch(reason => {
+        })
+      },
+      patentName: { required },
+      patentState: { required },
+      patentType: { required },
+      patentApplyDate: { maxLength: maxLength(10) },
+      patentFeeMetion: { maxLength: maxLength(10) },
+      patentPassDate: { maxLength: maxLength(10) }
+    },
+    rowData: {
+      patentName: { required },
+      patentApplyDate: { maxLength: maxLength(10) },
+      patentPassDate: { maxLength: maxLength(10) },
+      patentFeeMetion: { maxLength: maxLength(10) }
+    },
+    queryData: {
+      patentApplyDate: { maxLength: maxLength(10) },
+      patentPassDate: { maxLength: maxLength(10) },
+      patentApplyDateEnd: { maxLength: maxLength(10) },
+      patentPassDateEnd: { maxLength: maxLength(10) }
+    }
+  },
   computed: {
-    ...mapState('Patent', ['patentList', 'sendEditedRes', 'addNewRes', 'pageSize']),
+    ...mapState('Patent', ['patentList', 'sendEditedRes', 'addNewRes', 'trashRes', 'pageSize', 'pieChart', 'pieAuthChart']),
     pagination: {
       get () {
         return this.$store.state.Patent.pagination
@@ -413,17 +540,8 @@ export default {
       }
     }
   },
-  mounted () {
-    if (this.patentList.length === 0) {
-      // todo 为空且返回为成功
-      this.tbLoading = true
-    }
-    /* 挂载后获取初始分页信息 */
-    this.onRequest({
-      pagination: this.pagination
-    })
-  },
   methods: {
+    /* 日期判断，小于30天的进行提醒 */
     diffDate: function (date) {
       if (difDate(date) <= 30) {
         return true
@@ -431,16 +549,34 @@ export default {
       return false
     },
     /* 不能放在计算属性中，会造成循环计算 */
-    ...mapMutations('Patent', ['addNewMutation', 'sendEditedMutation', 'setCurrentPageMutation', ' setRowsPerPageMutation']),
-    ...mapActions('Patent', ['trashDataAction', 'moduleDataAction', 'sendEditedAction', 'newDateAction']),
+    ...mapMutations('Patent', ['addNewMutation', 'sendEditedMutation', 'setCurrentPageMutation', 'setRowsPerPageMutation']),
+    ...mapActions('Patent',
+      [
+        'trashDataAction',
+        'moduleDataAction',
+        'sendEditedAction',
+        'newDateAction',
+        'patentChartAction'
+      ]),
     /* 初始化信提示 */
     initTip () {
       this.tTip = false
       this.fTip = false
     },
-    /* 挂载后获取初始数据 */
+    /* 挂载后初始数据 */
     onRequest (props) {
-      this.moduleDataAction(props.pagination)
+      this.moduleDataAction(props)
+    },
+    /* 查询数据 */
+    selectData () {
+      this.moduleDataAction({
+        pagination: this.pagination,
+        queryData: this.queryData
+      })
+    },
+    resetData () {
+      Object.keys(this.queryData).forEach(key => (this.queryData[key] = null))
+      this.selectData()
     },
     /* 获得行的信息赋予rowdata，准备向后台发送 */
     edit (props) {
@@ -448,31 +584,42 @@ export default {
       this.initTip()
       this.editDialog = true
       this.rowData = Object.assign({}, props.row)
-      console.log(this.rowData)
     },
+    /* 修改数据 */
+    sendEditedData () {
+      if (this.$v.rowData.$invalid === false) {
+        this.sendEditedMutation(99)
+        // 点击保存后显示运行图标
+        this.loading = true
+        this.initTip()
+        this.sendEditedAction(this.rowData)
+        this.moduleDataAction({
+          pagination: this.pagination,
+          queryData: this.queryData
+        })
+      }
+    },
+    /* 删除数据 */
     trash (props) {
       this.trashDataAction({ autoId: props.row.autoId })
+      this.moduleDataAction({
+        pagination: this.pagination,
+        queryData: this.queryData
+      })
     },
-    /* 向后台发送修改后的data进行更新 */
-    sendEditedData () {
-      this.sendEditedMutation(99)
-      // 点击保存后显示运行图标
-      this.loading = true
-      this.initTip()
-      this.sendEditedAction(this.rowData)
-    },
-    /* 向后台发送新增数据 */
+    /* 新增数据 */
     addNewData () {
-      this.addNewMutation(99)
-      // 初始化新增状态
-      this.addloading = true
-      this.initTip()
-      this.newDateAction(this.newData)
-    },
-    addNextNewData () {
-      this.initTip()
-      this.addloading = false
-      this.newData = []
+      if (this.$v.newData.$invalid === false) {
+        this.addNewMutation(99)
+        // 初始化新增状态
+        this.addloading = true
+        this.initTip()
+        this.newDateAction(this.newData)
+        this.moduleDataAction({
+          pagination: this.pagination,
+          queryData: this.queryData
+        })
+      }
     },
     updateTip (val) {
       // 监控变化之前要先重置Res为99，
@@ -487,6 +634,7 @@ export default {
     }
   },
   watch: {
+    // 专利列表发生变动
     patentList (val) {
       this.tbLoading = false
     },
@@ -494,15 +642,17 @@ export default {
     currentPage (val) {
       this.tbLoading = true
       this.setCurrentPageMutation(val)
-      this.onRequest({
-        pagination: this.pagination
+      this.moduleDataAction({
+        pagination: this.pagination,
+        queryData: this.queryData
       })
     },
     // 改变每页的数量重新发起请求
     rowsPerPage (val) {
       this.setRowsPerPageMutation(val)
-      this.onRequest({
-        pagination: this.pagination
+      this.moduleDataAction({
+        pagination: this.pagination,
+        queryData: this.queryData
       })
       this.currentPage = 1
     },
@@ -512,18 +662,49 @@ export default {
         this.loading = false
         this.updateTip(val)
         this.btnDisable = true
+        this.sendMetion = false
+        this.moduleDataAction({
+          pagination: this.pagination,
+          queryData: this.queryData
+        })
       }
     },
     // 监控新增后返回状态
     addNewRes (val) {
       if (val !== 99) {
-        this.addloading = false
+        // 显示操作返回结果
         this.updateTip(val)
+        // 返回状态后变更加载状态
+        this.addloading = false
+        // 操作成功
+        if (val === 1) {
+          // 使数据集为空等待添加下一条
+          const _this = this
+          setTimeout(function () {
+            Object.keys(_this.newData).forEach(key => (_this.newData[key] = null))
+          }, 800)
+          this.moduleDataAction({
+            pagination: this.pagination,
+            queryData: this.queryData
+          })
+        }
+      }
+    },
+    trashRes (val) {
+      if (val === 1) {
+        this.moduleDataAction({
+          pagination: this.pagination,
+          queryData: this.queryData
+        })
       }
     }
   }
 }
 </script>
 
-<style lang="sass" scoped>
+<style lang="sass">
+  .half-round
+    border-radius: 0 32px 32px 0
+  .fixed-width
+    width: 150px
 </style>
