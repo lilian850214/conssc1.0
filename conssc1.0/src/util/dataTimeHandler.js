@@ -11,6 +11,16 @@ export function getDate (val) {
 
 export function difDate (val) {
   const inputDate = new Date(val)
-  var diffDate = Math.abs(inputDate - new Date()) / (1 * 24 * 60 * 60 * 1000)
-  return diffDate
+  var diffDate = Math.abs(inputDate - new Date()) / (365 * 24 * 60 * 60 * 1000)
+  return diffDate.toFixed(1)
+}
+export function difTwoDate (valend, valstart) {
+  var diffDate = Math.abs(new Date(valend) - new Date(valstart)) / (365 * 24 * 60 * 60 * 1000)
+  return diffDate.toFixed(0)
+}
+
+export function mentionDate (val) {
+  const inputDate = new Date(val)
+  var mentionDate = (inputDate - new Date()) / (24 * 60 * 60 * 1000)
+  return mentionDate.toFixed(0)
 }

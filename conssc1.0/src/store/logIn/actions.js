@@ -1,13 +1,10 @@
 import axios from 'axios'
-export function treeDataAction (store) {
-  axios.post('api/org').then((response) => {
-    store.commit('TreeDataMutation', response.data)
+import qs from 'qs'
+export function loginAction (store, data) {
+  axios.post('api/login', qs.stringify(data)).then((response) => {
+    store.commit('loginMutation', response.data)
   })
 }
-
-export function permissionDataAction (store, rolesId) {
-  axios.post('api/permissionSet', { rolesId: rolesId }).then((response) => {
-    console.log('action中' + response.data)
-    store.commit('permissionDataMutation', response.data)
-  })
+export function loginOutAction () {
+  axios.post('api/exit')
 }

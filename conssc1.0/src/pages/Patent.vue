@@ -36,7 +36,8 @@
         </div>
         <div class="col-xs-12 col-lg-3 col-md-6">
           <q-input v-model="queryData.patentApplyDate"
-                   type="date"
+
+                   type="date" max="2200-12-31"
                    prefix="申请日启"
                    hint="包含该日期"
                    color="green-5"
@@ -45,7 +46,7 @@
                    error-message="日期格式错误"
                    :error="!this.$v.queryData.patentApplyDate.maxLength"/>
           <q-input v-model="queryData.patentApplyDateEnd"
-                   type="date"
+                   type="date" max="2200-12-31"
                    prefix="申请日止"
                    color="green-5" class="q-pa-sm text-subtitle1"
                    dense
@@ -54,7 +55,8 @@
         </div>
         <div class="col-xs-12 col-lg-3 col-md-6">
           <q-input v-model="queryData.patentPassDate"
-                   type="date"
+
+                   type="date" max="2200-12-31"
                    prefix="授权日启"
                    hint="包含该日期"
                    color="green-5"
@@ -64,7 +66,8 @@
                    :error="!this.$v.queryData.patentPassDate.maxLength"
           />
           <q-input v-model="queryData.patentPassDateEnd"
-                   type="date"
+                   type="date" max="2200-12-31"
+
                    prefix="授权日止"
                    color="green-5" class="q-pa-sm text-subtitle1"
                    dense
@@ -185,14 +188,16 @@
                       class="q-pt-lg text-subtitle1" dense/>
             <q-input v-model="rowData.patentApplyDate"
                      color="green-5"
-                     type="date"
+                     type="date" max="2200-12-31"
+
                      prefix="申请日期"
                      class="q-pt-lg text-subtitle1"
                      dense
                      error-message="必填"
                      :error="!this.$v.rowData.patentApplyDate.maxLength"/>
             <q-input v-model="rowData.patentPassDate"
-                     type="date"
+                     type="date" max="2200-12-31"
+
                      prefix="授权日期"
                      class="q-pt-lg text-subtitle1"
                      dense
@@ -205,7 +210,8 @@
                      class="q-pt-lg text-subtitle1" type="text" clearable dense/>
             <q-input v-model="rowData.patentFeeMetion"
                      color="green-5"
-                     type="date"
+                     type="date" max="2200-12-31"
+
                      prefix="缴费提醒"
                      class="q-pt-lg text-subtitle1"
                      dense
@@ -269,7 +275,8 @@
               </div>
               <div class="col-xs-12 col-lg-3 col-md-6">
                 <q-input v-model="newData.patentApplyDate"
-                         type="date"
+                         type="date" max="2200-12-31"
+
                          prefix="申请日期"
                          color="green-5"
                          class="q-pa-sm text-subtitle1"
@@ -277,7 +284,8 @@
                          error-message="日期格式错误"
                          :error="!this.$v.newData.patentApplyDate.maxLength"/>
                 <q-input v-model="newData.patentPassDate"
-                         type="date"
+                         type="date" max="2200-12-31"
+
                          prefix="授权日期"
                          color="green-5"
                          class="q-pa-sm text-subtitle1"
@@ -288,7 +296,8 @@
               </div>
               <div class="col-xs-12 col-lg-3 col-md-6">
                 <q-input v-model="newData.patentFeeMetion"
-                         type="date"
+                         type="date" max="2200-12-31"
+
                          prefix="缴费提醒"
                          color="green-5" class="q-pa-sm text-subtitle1"
                          clearable
@@ -325,12 +334,15 @@ import { mapActions, mapMutations, mapState } from 'vuex'
 import { difDate } from '../util/dataTimeHandler'
 import { helpers, maxLength, required } from 'vuelidate/lib/validators'
 import { isUnique } from '../util/myValidate'
-import ECharts from 'vue-echarts/components/ECharts'
+import VChart, { THEME_KEY } from 'vue-echarts'
 
 export default {
   name: 'Patent',
   components: {
-    'v-chart': ECharts
+    VChart
+  },
+  provide: {
+    [THEME_KEY]: 'dark'
   },
   data () {
     return {
@@ -445,7 +457,6 @@ export default {
           align: 'left',
           field: '',
           headerStyle: 'font-size:16px;font-weight:bold'
-          // format: (val) => getDate(val)
         },
         {
           name: 'patentPassDate',
@@ -454,7 +465,6 @@ export default {
           align: 'left',
           field: '',
           headerStyle: 'font-size:16px;font-weight:bold'
-          // format: (val) => getDate(val)
         },
         {
           name: 'patentFee',

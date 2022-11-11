@@ -1,6 +1,17 @@
 export default function () {
   return {
-    orgChartData: [],
-    orgChartSeleced: []
+    token: {
+      isLogin: false,
+      message: '',
+      userDetail: {
+        realName: ''
+      },
+      userRoles: {
+        orgName: '',
+        userDept: ''
+      },
+      userDept: '',
+      companyId: null
+    }
   }
 }

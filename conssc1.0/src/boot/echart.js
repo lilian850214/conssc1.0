@@ -1,12 +1,33 @@
 import Vue from 'vue'
+import { use } from 'echarts/core'
 import ECharts from 'vue-echarts'
 
-import theme from '../theme/yellow-green'
-ECharts.registerTheme('yellow-green', theme) // 引入主题
-import 'echarts/lib/component/title'
-import 'echarts/lib/component/legend'
-import 'echarts/lib/component/grid'
-import 'echarts/lib/component/tooltip'
-import 'echarts/lib/chart/pie'
-import 'echarts/lib/chart/bar'
+import {
+  CanvasRenderer
+} from 'echarts/renderers'
+
+import {
+  BarChart, LineChart,
+  PieChart, TreemapChart
+} from 'echarts/charts'
+
+import {
+  GridComponent,
+  TooltipComponent,
+  TitleComponent,
+  LegendComponent
+} from 'echarts/components'
+import 'echarts/theme/walden'
+
+use([
+  CanvasRenderer,
+  BarChart,
+  PieChart,
+  LineChart,
+  TreemapChart,
+  GridComponent,
+  TooltipComponent,
+  TitleComponent,
+  LegendComponent
+])
 Vue.component('v-chart', ECharts)

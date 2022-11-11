@@ -1,6 +1,6 @@
 <template>
-  <!--  CONSSC内部使用模块 -->
-  <div class="q-pa-md">
+  <div class="q-ma-sm" >
+  InnerAdmin
     <!--修改操作区域-->
     <div class="q-pa-md">
       <q-card class="my-card" flat>
@@ -13,16 +13,16 @@
           <q-input v-model="detail" color="black" style="font-size:20px;font-weight: 500" >
           </q-input>
           <div class="q-mt-sm">
-          <q-btn @click="sendDetail" color="green-5" label="保 存"></q-btn>
-          <q-spinner
-            color="lime-5"
-            size="2em"
-            :thickness="10"
-            v-if="loading"
-            class="q-ml-lg"
-          />
-          <span class="q-pl-lg text-green-5 text-weight-bolder" v-if="tTip">修改成功</span>
-          <span class="q-pl-lg text-red-5 text-weight-bolder" v-if="fTip">修改失败</span>
+            <q-btn @click="sendDetail" color="green-5" label="保 存"></q-btn>
+            <q-spinner
+              color="lime-5"
+              size="2em"
+              :thickness="10"
+              v-if="loading"
+              class="q-ml-lg"
+            />
+            <span class="q-pl-lg text-green-5 text-weight-bolder" v-if="tTip">修改成功</span>
+            <span class="q-pl-lg text-red-5 text-weight-bolder" v-if="fTip">修改失败</span>
           </div>
         </q-card-section>
       </q-card>
@@ -64,14 +64,14 @@
         </template>
       </q-table>
       <div class="row justify-center q-mt-md">
-      <q-pagination
-        v-model="currentPage"
-        color="green"
-        :max="pageSize"
-        :max-pages="6"
-        :boundary-numbers="true"
-      >
-      </q-pagination>
+        <q-pagination
+          v-model="currentPage"
+          color="green"
+          :max="pageSize"
+          :max-pages="6"
+          :boundary-numbers="true"
+        >
+        </q-pagination>
       </div>
     </div>
 
@@ -95,9 +95,8 @@
 </template>
 
 <script>
-
 export default {
-  name: 'ModuleEdit',
+  name: 'InnerAdmin',
   data () {
     return {
       /*
@@ -261,5 +260,6 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
+<style scoped>
+
 </style>

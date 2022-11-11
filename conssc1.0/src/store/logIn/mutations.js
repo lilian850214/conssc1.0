@@ -1,6 +1,6 @@
-export function TreeDataMutation (state, data) {
-  state.orgChartData = data
+export function loginMutation (state, data) {
+  state.token = data
 }
-export function permissionDataMutation (state, data) {
-  state.orgChartSeleced = data
+export function loginOutMutation (state, data) {
+  state.token = data
 }

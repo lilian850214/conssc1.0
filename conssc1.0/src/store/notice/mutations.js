@@ -1,5 +1,5 @@
 export function moduleDataMutation (state, data) {
-  state.projectPlanList = data.records
+  state.patentList = data.records
   state.pageSize = data.totalPages
   state.Page = data.currentPage
 }
@@ -19,7 +19,7 @@ export function setRowsPerPageMutation (state, data) {
 export function setCurrentPageMutation (state, data) {
   state.pagination.page = data
 }
-
-export function setAutoIdMutation (state, data) {
-  state.autoId = data
+export function patentChartMutation (state, data) {
+  state.pieChart.series[0].data = data.all
+  state.pieAuthChart.series[0].data = data.auth
 }

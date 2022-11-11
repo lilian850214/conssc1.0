@@ -1,17 +1,18 @@
 <template>
   <div class="q-pa-md">
+      <q-btn color="lime-4" class="text-black" style="margin-right:-15px" label="新增项目" @click="addDrawer=true"/>
     <!--项目查询-->
-    <q-card class="q-pt-lg" flat>
+    <q-card class="q-mt-lg bg-grey-1" flat bordered square>
+      <q-avatar size="40px" font-size="20px" color="lime-4" text-color="black" icon="fas fa-search" />
       <q-card-section>
-        <p class="text-h6 q-pl-lg q-pa-sm half-round bg-lime-4 fixed-width">搜索条件</p>
         <div class="row">
-          <div class="col-xs-12 col-lg-4 col-md-6">
+          <div class="col-xs-12 col-lg-3 col-md-6">
             <q-input v-model="queryData.projectName"
                      clearable dense
                      prefix="项目名称"
                      color="green-5"
                      class="q-pa-sm text-subtitle1"
-            ></q-input>
+            />
             <q-input v-model="queryData.projectCode"
                      clearable dense
                      prefix="项目代码"
@@ -19,7 +20,7 @@
                      class="q-pa-sm text-subtitle1"
             />
           </div>
-          <div class="col-xs-12 col-lg-4 col-md-6">
+          <div class="col-xs-12 col-lg-3 col-md-6">
             <q-input v-model="queryData.projectManger" prefix="项目经理" color="green-5" class="q-pa-sm text-subtitle1"
                      clearable dense/>
             <q-select v-model="queryData.projectState" prefix="项目状态"
@@ -29,9 +30,9 @@
                       dense
             />
           </div>
-          <div class="col-xs-12 col-lg-4 col-md-6">
+          <div class="col-xs-12 col-lg-3 col-md-6">
             <q-input v-model="queryData.projectStart"
-                     type="date"
+                     type="date" max="2200-12-31"
                      prefix="开始日期"
                      color="green-5"
                      class="q-pa-sm text-subtitle1"
@@ -40,7 +41,7 @@
                      error-message="日期格式错误"
                      :error="!this.$v.queryData.projectStart.maxLength"/>
             <q-input v-model="queryData.projectEnd"
-                     type="date"
+                     type="date" max="2200-12-31"
                      prefix="结束日期"
                      color="green-5"
                      class="q-pa-sm text-subtitle1"
@@ -50,41 +51,29 @@
                      :error="!this.$v.queryData.projectEnd.maxLength"
             />
           </div>
-        </div>
-        <div class="row">
-          <div class="col-xs-12 col-lg-4">
+          <div class="col-xs-12 col-lg-3 col-md-6">
             <q-input v-model="queryData.projectBudget" prefix="项目预算" color="green-5"
                      class="q-pa-sm text-subtitle1" type="number" dense
                      hint="查询大于该数字的记录"
                      error-message="只能填“>=0”的数字,且不为空"
                      :error="!this.$v.queryData.projectBudget.numeric || !this.$v.queryData.projectBudget.required"/>
-          </div>
-          <div class="col-xs-12 col-lg-8">
             <q-input v-model="queryData.projectRemark" prefix="项目备注" color="green-5"
                      class="q-pa-sm text-subtitle1" type="text" autogrow dense/>
           </div>
         </div>
-      </q-card-section>
-      <q-card-section>
-        <div class="row float-right">
-          <q-btn class="q-ma-sm" color="white" text-color="black" label="重 置" size="md" @click="resetData"
-          />
-          <q-btn class="q-ma-sm text-black" color="lime-4" label="查 询" size="md" @click="selectData"
-          />
+        <div class="row">
+          <div class="col-lg-10 col-md-12"></div>
+          <div class="col-lg-2 col-md-12">
+            <q-btn class="q-ma-sm" color="white" text-color="black" label="重 置" size="md" @click="resetData"
+            />
+            <q-btn class="q-ma-sm text-black" color="lime-4" label="查 询" size="md" @click="selectData"
+            />
+          </div>
         </div>
       </q-card-section>
     </q-card>
-    <div class=" q-pa-md">
-      <!--项目列表-->
-      <p class="text-h6 q-pl-lg q-pa-sm half-round bg-lime-4 fixed-width q-mb-none">项目列表</p>
-      <div>
-        <span class="q-pa-lg text-subtitle2">每页显示</span>
-        <q-radio v-model="rowsPerPage" val=10 label="10" color="lime-7" size="md"/>
-        <q-radio v-model="rowsPerPage" val=20 label="20" color="lime-7" size="md"/>
-        <q-radio v-model="rowsPerPage" val=30 label="30" color="lime-7" size="md"/>
-        <q-radio v-model="rowsPerPage" val=0 label="所有" color="lime-7" size="md"/>
-      </div>
-    </div>
+    <!--项目列表-->
+    <q-card flat class="q-mt-lg">
     <!-- 项目表格-->
     <q-table
       grid
@@ -92,11 +81,15 @@
       :data="projectList"
       :columns="columns"
       row-key="index"
-      :pagination.sync="pagination"
+      :pagination.sync="projectPagination"
       hide-pagination
     >
       <template v-slot:top-right>
-        <q-btn color="lime-4" class="text-black" style="margin-right:-15px" label="新增项目" @click="addDialog=true"/>
+          <span class="q-pa-lg text-subtitle2">每页显示</span>
+          <q-radio v-model="rowsPerPage" val=10 label="10" color="lime-7" size="md"/>
+          <q-radio v-model="rowsPerPage" val=20 label="20" color="lime-7" size="md"/>
+          <q-radio v-model="rowsPerPage" val=30 label="30" color="lime-7" size="md"/>
+          <q-radio v-model="rowsPerPage" val=0 label="所有" color="lime-7" size="md"/>
       </template>
       <template v-slot:item="props">
         <div class=" col-xs-12 col-md-6 col-lg-3 q-mt-lg q-pa-sm">
@@ -113,7 +106,7 @@
             <q-card-section class="text-left q-pa-none bg-grey-2">
               <q-btn flat class="text-bold text-subtitle1" label="进度跟踪" @click="pushToDetail(props)"/>
               <q-btn flat class="text-bold text-subtitle1" label="编辑项目" @click="edit(props)"/>
-              <q-btn flat text-color="grey" label="删除项目" @click="confirmDialog=true"/>
+              <q-btn flat text-color="grey" label="删除项目" @click="trash(props)"/>
             </q-card-section>
             <q-separator/>
             <q-card-section class="text-left text-subtitle1">
@@ -154,104 +147,88 @@
         <q-pagination
           v-model="currentPage"
           color="black"
-          :max="pageSize"
+          :max="projectPageSize"
           :max-pages="6"
           :boundary-numbers="true"
         />
       </div>
     </div>
-    <!--删除项目确认框-->
-    <q-dialog v-model="confirmDialog">
-      <q-card>
-        <q-card-section class="row items-center">
-          <q-avatar icon="fas fa-times" color="red" text-color="white"/>
-          <span class="q-ml-lg text-bold text-h5">即将删除： 项目名称</span>
-        </q-card-section>
-
-        <q-card-actions align="center">
-          <q-btn flat label="确 认" color="green-5" class="text-bold text-h6"/>
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
+    </q-card>
     <!--新增项目-->
-    <q-dialog v-model="addDialog" full-width>
-      <q-card>
-        <q-card-section class="q-pt-none">
-          <div class="row">
-            <div class="col-xs-12 col-lg-4 col-md-6">
-              <q-input v-model="newData.projectName"
-                       clearable dense
-                       prefix="项目名称"
-                       color="green-5"
-                       class="q-pa-sm text-subtitle1"
-                       error-message="必填"
-                       :error="!this.$v.newData.projectName.required"
-              ></q-input>
-              <q-input v-model="newData.projectCode"
-                       clearable dense
-                       prefix="项目代码"
-                       color="green-5"
-                       class="q-pa-sm text-subtitle1"
-              />
-            </div>
-            <div class="col-xs-12 col-lg-4 col-md-6">
-              <q-input v-model="newData.projectManger" prefix="项目经理" color="green-5" class="q-pa-sm text-subtitle1"
-                       clearable dense/>
-              <q-select v-model="newData.projectState" prefix="项目状态"
-                        :options="projectStateOptions"
-                        color="green-5"
-                        class="q-pa-sm text-subtitle1"
-                        dense
-                        error-message="必填"
-                        :error="!this.$v.newData.projectState.required"/>
-            </div>
-            <div class="col-xs-12 col-lg-4 col-md-6">
-              <q-input v-model="newData.projectStart"
-                       type="date"
-                       prefix="开始日期"
-                       color="green-5"
-                       class="q-pa-sm text-subtitle1"
-                       dense
-                       clearable
-                       error-message="日期格式错误"
-                       :error="!this.$v.newData.projectStart.maxLength"/>
-              <q-input v-model="newData.projectEnd"
-                       type="date"
-                       prefix="结束日期"
-                       color="green-5"
-                       class="q-pa-sm text-subtitle1"
-                       dense
-                       clearable
-                       error-message="日期格式错误"
-                       :error="!this.$v.newData.projectEnd.maxLength"
-              />
-            </div>
-          </div>
-            <div class="row">
-            <div class="col-xs-12 col-lg-4">
-              <q-input v-model="newData.projectBudget" prefix="项目预算" color="green-5"
-                       class="q-pa-sm text-subtitle1" type="number"  hint="只能为数字，查询大于该数字的记录" clearable dense
-                       error-message="只能填“>=0”的数字,且不为空"
-                       :error="!this.$v.newData.projectBudget.numeric || !this.$v.newData.projectBudget.required"
-              />
-            </div>
-              <div class="col-xs-12 col-lg-8">
-                <q-input v-model="newData.projectRemark" prefix="项目备注" color="green-5"
-                         class="q-pa-sm text-subtitle1" type="text" autogrow dense/>
-              </div>
-            </div>
+    <q-drawer
+      side="right"
+      no-swipe-backdrop
+      v-model="addDrawer"
+      bordered
+      overlay
+      :width="350"
+      :breakpoint="500"
+      content-class=""
+    >
+      <q-scroll-area class="fit">
+        <h5 class="q-pa-sm q-pl-lg text-h6">新增项目</h5>
+        <q-card flat class="q-ma-sm">
+        <q-input v-model="newData.projectName"
+                 clearable dense
+                 prefix="项目名称"
+                 color="green-5"
+                 class="q-pa-sm text-subtitle1"
+                 error-message="必填"
+                 :error="!this.$v.newData.projectName.required"
+        ></q-input>
+        <q-input v-model="newData.projectCode"
+                 clearable dense
+                 prefix="项目代码"
+                 color="green-5"
+                 class="q-pa-sm text-subtitle1"
+        />
+        <q-input v-model="newData.projectManger" prefix="项目经理" color="green-5" class="q-pa-sm text-subtitle1"
+                 clearable dense/>
+        <q-select v-model="newData.projectState" prefix="项目状态"
+                  :options="projectStateOptions"
+                  color="green-5"
+                  class="q-pa-sm text-subtitle1"
+                  dense
+                  error-message="必填"
+                  :error="!this.$v.newData.projectState.required"/>
+        <q-input v-model="newData.projectStart"
+                 type="date" max="2200-12-31"
 
-        </q-card-section>
+                 prefix="开始日期"
+                 color="green-5"
+                 class="q-pa-sm text-subtitle1"
+                 dense
+                 clearable
+                 error-message="日期格式错误"
+                 :error="!this.$v.newData.projectStart.maxLength"/>
+        <q-input v-model="newData.projectEnd"
+                 type="date" max="2200-12-31"
 
-        <q-card-section align="left" class="bg-white text-green-5">
-          <q-btn  :loading="addloading" class="q-ma-md" color="green" label="保 存" size="18px"
-                 :disabled="this.$v.newData.$invalid" icon-right="send" @click="addNewData"/>
+                 prefix="结束日期"
+                 color="green-5"
+                 class="q-pa-sm text-subtitle1"
+                 dense
+                 clearable
+                 error-message="日期格式错误"
+                 :error="!this.$v.newData.projectEnd.maxLength"
+        />
+        <q-input v-model="newData.projectBudget" prefix="项目预算" color="green-5"
+                 class="q-pa-sm text-subtitle1" type="number"  hint="只能为数字，查询大于该数字的记录" clearable dense
+                 error-message="只能填“>=0”的数字,且不为空"
+                 :error="!this.$v.newData.projectBudget.numeric || !this.$v.newData.projectBudget.required"
+        />
+        <q-input v-model="newData.projectRemark" prefix="项目备注" color="green-5"
+                 class="q-pa-sm text-subtitle1" type="text" autogrow dense/>
+        <div class="q-pa-sm q-pl-lg q-gutter-md">
           <!--操作结果提示-->
           <span class="q-pl-lg text-green-5 text-weight-bolder text-subtitle1" v-if="tTip">添加成功</span>
           <span class="q-pl-lg text-red-5 text-weight-bolder" v-if="fTip">添加失败</span>
-        </q-card-section>
-      </q-card>
-    </q-dialog>
+          <q-btn :loading="addloading" size="md" color="lime-4" text-color="black" label="保存" @click="addNewData"/>
+          <q-btn size="md" text-color="black" label="关闭"  @click="addDrawer=false"/>
+        </div>
+        </q-card>
+      </q-scroll-area>
+    </q-drawer>
     <!--编辑项目-->
     <q-dialog v-model="editDialog" full-width>
       <q-card>
@@ -286,7 +263,8 @@
             </div>
             <div class="col-xs-12 col-lg-4 col-md-6">
               <q-input v-model="rowData.projectStart"
-                       type="date"
+                       type="date" max="2200-12-31"
+
                        prefix="开始日期"
                        color="green-5"
                        class="q-pa-sm text-subtitle1"
@@ -295,7 +273,8 @@
                        error-message="日期格式错误"
                        :error="!this.$v.rowData.projectStart.maxLength"/>
               <q-input v-model="rowData.projectEnd"
-                       type="date"
+                       type="date" max="2200-12-31"
+
                        prefix="结束日期"
                        color="green-5"
                        class="q-pa-sm text-subtitle1"
@@ -358,9 +337,8 @@ export default {
       tTip: false,
       fTip: false,
       btnDisable: false,
-      addDialog: false,
+      addDrawer: false,
       editDialog: false,
-      confirmDialog: false,
       projectStateOptions: ['进行中', '完成', '终止', '作废', '暂停'],
       rowData: {
         projectName: null,
@@ -408,12 +386,11 @@ export default {
   },
   mounted () {
     if (this.projectList.length === 0) {
-      // todo 为空且返回为成功
       this.tbLoading = true
     }
     /* 挂载后获取初始分页信息 */
     this.onRequest({
-      pagination: this.pagination,
+      pagination: this.projectPagination,
       queryData: this.queryData
     })
   },
@@ -440,10 +417,17 @@ export default {
     }
   },
   computed: {
-    ...mapState('Project', ['projectList', 'sendEditedRes', 'addNewRes', 'trashRes', 'pageSize', 'pieChart', 'pieAuthChart']),
-    pagination: {
+    ...mapState('Project',
+      [
+        'projectList',
+        'projectSendEditedRes',
+        'projectAddNewRes',
+        'projectTrashRes',
+        'projectPageSize'
+      ]),
+    projectPagination: {
       get () {
-        return this.$store.state.Patent.pagination
+        return this.$store.state.Project.projectPagination
       },
       set () {
       }
@@ -451,13 +435,20 @@ export default {
   },
   methods: {
     /* 不能放在计算属性中，会造成循环计算 */
-    ...mapMutations('Project', ['addNewMutation', 'sendEditedMutation', 'setCurrentPageMutation', 'setRowsPerPageMutation']),
+    ...mapMutations('Project',
+      [
+        'projectModuleDataMutation',
+        'projectAddNewMutation',
+        'projectSendEditedMutation',
+        'projectSetCurrentPageMutation',
+        'projectSetRowsPerPageMutation'
+      ]),
     ...mapActions('Project',
       [
-        'trashDataAction',
-        'moduleDataAction',
-        'sendEditedAction',
-        'newDateAction'
+        'projectNewDateAction',
+        'projectTrashDataAction',
+        'projectSendEditedAction',
+        'projectModuleDataAction'
       ]),
     /* 初始化信提示 */
     initTip () {
@@ -466,12 +457,12 @@ export default {
     },
     /* 挂载后初始数据 */
     onRequest (props) {
-      this.moduleDataAction(props)
+      this.projectModuleDataAction(props)
     },
     /* 查询数据 */
     selectData () {
-      this.moduleDataAction({
-        pagination: this.pagination,
+      this.projectModuleDataAction({
+        pagination: this.projectPagination,
         queryData: this.queryData
       })
     },
@@ -490,36 +481,36 @@ export default {
     /* 修改数据 */
     sendEditedData () {
       if (this.$v.rowData.$invalid === false) {
-        this.sendEditedMutation(99)
+        this.projectSendEditedMutation(99)
         // 点击保存后显示运行图标
         this.loading = true
         this.initTip()
-        this.sendEditedAction(this.rowData)
+        this.projectSendEditedAction(this.rowData)
 
-        this.moduleDataAction({
-          pagination: this.pagination,
+        this.projectModuleDataAction({
+          pagination: this.projectPagination,
           queryData: this.queryData
         })
       }
     },
     /* 删除数据 */
     trash (props) {
-      this.trashDataAction({ autoId: props.row.autoId })
-      this.moduleDataAction({
-        pagination: this.pagination,
+      this.projectTrashDataAction({ autoId: props.row.autoId })
+      this.projectModuleDataAction({
+        pagination: this.projectPagination,
         queryData: this.queryData
       })
     },
     /* 新增数据 */
     addNewData () {
       if (this.$v.newData.$invalid === false) {
-        this.addNewMutation(99)
+        this.projectAddNewMutation(99)
         // 初始化新增状态
         this.addloading = true
         this.initTip()
-        this.newDateAction(this.newData)
-        this.moduleDataAction({
-          pagination: this.pagination,
+        this.projectNewDateAction(this.newData)
+        this.projectModuleDataAction({
+          pagination: this.projectPagination,
           queryData: this.queryData
         })
       }
@@ -536,7 +527,13 @@ export default {
       }
     },
     pushToDetail (props) {
-      this.$router.push(`/ProjectBoard/${props.row.autoId}/${props.row.projectName}`)
+      this.$router.push({
+        name: 'ProjectBoard',
+        params: {
+          autoId: props.row.autoId,
+          projectName: props.row.projectName
+        }
+      })
     }
   },
   watch: {
@@ -547,36 +544,36 @@ export default {
     // 翻页
     currentPage (val) {
       this.tbLoading = true
-      this.setCurrentPageMutation(val)
-      this.moduleDataAction({
-        pagination: this.pagination,
+      this.projectSetCurrentPageMutation(val)
+      this.projectModuleDataAction({
+        pagination: this.projectPagination,
         queryData: this.queryData
       })
     },
     // 改变每页的数量重新发起请求
     rowsPerPage (val) {
-      this.setRowsPerPageMutation(val)
-      this.moduleDataAction({
-        pagination: this.pagination,
+      this.projectSetRowsPerPageMutation(val)
+      this.projectModuleDataAction({
+        pagination: this.projectPagination,
         queryData: this.queryData
       })
       this.currentPage = 1
     },
     // 监控修改后返回状态
-    sendEditedRes (val) {
+    projectSendEditedRes (val) {
       if (val !== 99) {
         this.loading = false
         this.updateTip(val)
         this.btnDisable = true
         this.sendMetion = false
         this.moduleDataAction({
-          pagination: this.pagination,
+          pagination: this.projectPagination,
           queryData: this.queryData
         })
       }
     },
     // 监控新增后返回状态
-    addNewRes (val) {
+    projectAddNewRes (val) {
       if (val !== 99) {
         // 显示操作返回结果
         this.updateTip(val)
@@ -590,16 +587,16 @@ export default {
             Object.keys(_this.newData).forEach(key => (_this.newData[key] = null))
           }, 800)
           this.moduleDataAction({
-            pagination: this.pagination,
+            pagination: this.projectPagination,
             queryData: this.queryData
           })
         }
       }
     },
-    trashRes (val) {
+    projectTrashRes (val) {
       if (val === 1) {
         this.moduleDataAction({
-          pagination: this.pagination,
+          pagination: this.projectPagination,
           queryData: this.queryData
         })
       }
